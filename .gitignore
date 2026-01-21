@@ -131,3 +131,9 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+
+# TodoApp projects - bin/Debug folders (all variations)
+**/bin/Debug/
+**/bin\\Debug/
+TodoApp.*/bin/Debug/
+TodoApp.*/bin\\Debug/
