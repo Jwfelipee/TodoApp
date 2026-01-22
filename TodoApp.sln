@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Application", "Todo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Infrastructure", "TodoApp.Infrastructure\TodoApp.Infrastructure.csproj", "{81CCB051-4545-4135-B55F-AA6B99B6147E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Tests", "TodoApp.Tests\TodoApp.Tests.csproj", "{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{81CCB051-4545-4135-B55F-AA6B99B6147E}.Release|x64.Build.0 = Release|Any CPU
 		{81CCB051-4545-4135-B55F-AA6B99B6147E}.Release|x86.ActiveCfg = Release|Any CPU
 		{81CCB051-4545-4135-B55F-AA6B99B6147E}.Release|x86.Build.0 = Release|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Debug|x64.Build.0 = Debug|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Debug|x86.Build.0 = Debug|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Release|x64.ActiveCfg = Release|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Release|x64.Build.0 = Release|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Release|x86.ActiveCfg = Release|Any CPU
+		{7A9B8C7D-6E5F-4A3B-2C1D-0E9F8A7B6C5D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

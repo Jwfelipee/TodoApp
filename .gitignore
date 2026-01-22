@@ -137,3 +137,5 @@ _NCrunch*
 **/bin\\Debug/
 TodoApp.*/bin/Debug/
 TodoApp.*/bin\\Debug/
+
+.vs/*
