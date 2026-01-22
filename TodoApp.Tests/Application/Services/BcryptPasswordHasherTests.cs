@@ -1,10 +1,10 @@
 using TodoApp.Application.Services;
 using Xunit.Abstractions;
 
-namespace TodoApp.Tests.Domain.Services
+namespace TodoApp.Tests.Application.Services
 {
     [Trait("category", "ServicesBcrypPasswordHasher")]
-    public class TodoAppTestsDomainServicesBcryptPasswordHasherTests(ITestOutputHelper testOutputHelper)
+    public class TodoAppTestsApplicationServicesBcryptPasswordHasherTests(ITestOutputHelper testOutputHelper)
     {
         private readonly BcryptPasswordHasher _bcryptPasswordHasher = new();
         private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;

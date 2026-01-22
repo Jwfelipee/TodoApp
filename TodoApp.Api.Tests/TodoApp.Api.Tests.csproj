@@ -6,9 +6,8 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="35.6.5" />
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NSubstitute" Version="5.3.0" />
@@ -17,12 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../TodoApp.Application/TodoApp.Application.csproj" />
+    <Using Include="Xunit" />
+    <Content Include="Controllers\UserControllersTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
-    <Content Include="Application\Services\BcryptPasswordHasherTests.cs" />
+    <ProjectReference Include="..\TodoApp.Api\TodoApp.Api.csproj" />
+    <ProjectReference Include="..\TodoApp.Application\TodoApp.Application.csproj" />
+    <ProjectReference Include="..\TodoApp.Infrastructure\TodoApp.Infrastructure.csproj" />
   </ItemGroup>
-
 </Project>
