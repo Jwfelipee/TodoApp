@@ -61,7 +61,7 @@ public class UserControllers
         string email = "example@email.com";
         string password = "pass123";
         RegisterUserDto registerUser = new(name, email, password);
-        User savedUser = new (name, email, password);
+        User savedUser = new(name, email, password);
 
         _registerValidator.ValidateAsync(registerUser).Returns(new ValidationResult());
         _userRepository.GetByEmailAsync(email).Returns(savedUser);
@@ -89,4 +89,175 @@ public class UserControllers
 
         Assert.IsType<CreatedAtActionResult>(result);
     }
+
+    // Inicio dos testes com AI
+    #region Login Tests
+
+    [Fact]
+    public async Task Login_GivenInvalidValidation_ShouldReturnBadRequest()
+    {
+        // Arrange
+        string email = "";
+        string password = "pass123";
+        LoginUserDto loginDto = new(email, password);
+
+        List<ValidationFailure> validationFailures =
+        [
+            new ValidationFailure("Email", "Email é obrigatório")
+        ];
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult(validationFailures));
+
+        // Act
+        IActionResult result = await _userController.Login(loginDto);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task Login_GivenMultipleValidationErrors_ShouldReturnBadRequest()
+    {
+        // Arrange
+        string email = "";
+        string password = "";
+        LoginUserDto loginDto = new(email, password);
+
+        List<ValidationFailure> validationFailures =
+        [
+            new ValidationFailure("Email", "Email é obrigatório"),
+            new ValidationFailure("Password", "Senha é obrigatória")
+        ];
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult(validationFailures));
+
+        // Act
+        IActionResult result = await _userController.Login(loginDto);
+
+        // Assert
+        BadRequestObjectResult badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.NotNull(badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Login_GivenValidValidation_WhenUserNotFound_ShouldReturnUnauthorized()
+    {
+        // Arrange
+        string email = "notfound@email.com";
+        string password = "password123";
+        LoginUserDto loginDto = new(email, password);
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult());
+        _userRepository.GetByEmailAsync(email).ReturnsNull();
+
+        // Act
+        IActionResult result = await _userController.Login(loginDto);
+
+        // Assert
+        UnauthorizedObjectResult unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
+        Assert.NotNull(unauthorizedResult.Value);
+    }
+
+    [Fact]
+    public async Task Login_GivenValidValidation_WhenPasswordIsIncorrect_ShouldReturnUnauthorized()
+    {
+        // Arrange
+        string email = "user@email.com";
+        string correctPassword = "correctPassword123";
+        string incorrectPassword = "wrongPassword123";
+        LoginUserDto loginDto = new(email, incorrectPassword);
+
+        string corretPasswordHashed = await _bcryptPasswordHasher.HashPasswordAsync(correctPassword);
+        User user = new("John Doe", email, corretPasswordHashed);
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult());
+        _userRepository.GetByEmailAsync(email).Returns(user);
+
+        // Act
+        IActionResult result = await _userController.Login(loginDto);
+
+        // Assert
+        UnauthorizedObjectResult unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
+        Assert.NotNull(unauthorizedResult.Value);
+    }
+
+    [Fact]
+    public async Task Login_GivenValidCredentials_ShouldReturnOkWithUserData()
+    {
+        // Arrange
+        string email = "user@email.com";
+        string password = "password123";
+        string name = "John Doe";
+        LoginUserDto loginDto = new(email, password);
+
+        string hashedPassword = await _bcryptPasswordHasher.HashPasswordAsync(password);
+        User user = new(name, email, hashedPassword);
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult());
+        _userRepository.GetByEmailAsync(email).Returns(user);
+
+        // Act
+        IActionResult result = await _userController.Login(loginDto);
+
+        // Assert
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.NotNull(okResult.Value);
+
+        var responseData = okResult.Value;
+        Assert.NotNull(responseData);
+
+        var userIdProperty = responseData.GetType().GetProperty("userId");
+        var nameProperty = responseData.GetType().GetProperty("name");
+        var emailProperty = responseData.GetType().GetProperty("email");
+
+        Assert.NotNull(userIdProperty);
+        Assert.NotNull(nameProperty);
+        Assert.NotNull(emailProperty);
+
+        var userId = userIdProperty.GetValue(responseData);
+        var returnedName = nameProperty.GetValue(responseData);
+        var returnedEmail = emailProperty.GetValue(responseData);
+
+        Assert.Equal(user.Id, (Guid)userId!);
+        Assert.Equal(name, (string)returnedName!);
+        Assert.Equal(email, (string)returnedEmail!);
+    }
+
+    [Fact]
+    public async Task Login_ValidateIsCalledWithCorrectDto()
+    {
+        // Arrange
+        string email = "test@email.com";
+        string password = "testPassword123";
+        LoginUserDto loginDto = new(email, password);
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult());
+        _userRepository.GetByEmailAsync(email).ReturnsNull();
+
+        // Act
+        await _userController.Login(loginDto);
+
+        // Assert
+        await _loginValidator.Received(1).ValidateAsync(loginDto);
+    }
+
+    [Fact]
+    public async Task Login_WhenUserExists_ShouldQueryRepositoryWithCorrectEmail()
+    {
+        // Arrange
+        string email = "test@email.com";
+        string password = "testPassword123";
+        LoginUserDto loginDto = new(email, password);
+
+        _loginValidator.ValidateAsync(loginDto).Returns(new ValidationResult());
+        _userRepository.GetByEmailAsync(email).ReturnsNull();
+
+        // Act
+        await _userController.Login(loginDto);
+
+        // Assert
+        await _userRepository.Received(1).GetByEmailAsync(email);
+    }
+
+    #endregion
 }
